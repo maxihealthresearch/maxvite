@@ -62,7 +62,7 @@ jQuery(function ($) {
             $listProductsWrap.on("submit", ".additemform", addToCart);
             $listProductsWrap.on("click", ".listpage-toolbar-view li", toggleView);
             $listProductsWrap.on("change", ".listpage-toolbar-numberonpage select", togglePerPage);
-            $filterSection.on("click", ".filter-module .checkbox-list li", toggleFilters);
+            $filterSection.on("click", ".js-checkbox-list li", toggleFilters);
             $listProductsWrap.on("change", ".listpage-toolbar-sortby select", toggleSort);
             $filterSection.on("click", ".filter-module-clear", resetClear); //Reset Clear for any filter module
             $listProductsWrap.on("click", ".paginator li a", paginate);
