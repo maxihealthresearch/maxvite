@@ -21,12 +21,12 @@
 
 
 <cfset eachProductArray = ArrayNew(1) />
+<cfset eachProductArraySome = ArrayNew(1) />
 <cfset eachBrandArray = ArrayNew(1) />
 <cfset eachConcernArray = ArrayNew(1) />
 <cfset eachSpecialArray = ArrayNew(1) />
 <cfset initialProductIDArray = ArrayNew(1) />
 <cfset secondProductIDArray = ArrayNew(1) />
-<cfset finalMaxPrice = 0 />
 
 <cfparam name="q" default="">
 <cfparam name="numberonpage" type="integer" default="30">
@@ -103,6 +103,7 @@
 <cfset productstart = Ceiling((startpage*numberonpage)+1)>
 <cfset productend = Ceiling(productstart + (numberonpage-1))>
 
+
 <cfloop query="GetInitialProductData">
   <cfset ArrayAppend(initialProductIDArray, #ProductID#)>
 </cfloop>
@@ -165,13 +166,13 @@
     <!---check if product is buy 1 get 1 free--->
     <cfif GetDataSubc.SubCategoryID eq 554>
       <cfset eachProductStruct["bogo"] = 1 />
-      <cfset eachProductStruct["list_price"] = '#numberFormat(ListPrice, "_,____.__")#' />
+      <cfset eachProductStruct["list_price"] = #DollarFormat(ListPrice)# />
 <cfset finalPrice = #ourprice# />      
       <cfset eachProductStruct["dollars_saved"] = #DollarFormat(youSave)# />
       <cfset eachProductStruct["percent_saved"] = "#youSavePcnt#" />
       <cfelse>
       <cfif #ListPrice# GT #newprice# AND #newprice# GT 0>
-        <cfset eachProductStruct["list_price"] = '#numberFormat(ListPrice, "_,____.__")#' />
+        <cfset eachProductStruct["list_price"] = #DollarFormat(ListPrice)# />
         <cfelse>
         <cfset eachProductStruct["just_price"] = true />
 <cfset finalPrice = #ListPrice# />      
@@ -187,34 +188,47 @@
     </cfif>
     <cfset eachProductStruct["rating_grid"] = "<script>var rating#ProductID# = document.getElementById('pr_snippet_category_#ProductID#');POWERREVIEWS.display.snippet({write : function(content){rating#ProductID#.innerHTML = rating#ProductID#.innerHTML + content;}},{pr_page_id: '#ProductID#', pr_snippet_min_reviews : '1'})</script>" />
     <cfset eachProductStruct["rating_list"] = "<script>var rating#ProductID# = document.getElementById('pr_snippet_category#ProductID#');POWERREVIEWS.display.snippet({write : function(content){rating#ProductID#.innerHTML = rating#ProductID#.innerHTML + content;}},{pr_page_id: '#ProductID#', pr_snippet_min_reviews : '1'})</script>" />
-    <cfset eachProductStruct["final_price"] = '#numberFormat(finalPrice, "_,____.__")#' />
+    <cfset eachProductStruct["final_price"] = #DollarFormat(finalPrice)# />
+    <cfset eachProductStruct["final_price_rounded"] = #Round(finalPrice)# />
 
 
 <cfif IsDefined("finalMinPrice")>
-	<cfif finalMinPrice GT finalPrice>
-		<cfset finalMinPrice = #numberFormat(finalPrice, "___")# /> 
-	</cfif>
-	<cfif finalMaxPrice LT finalPrice>
-		<cfset finalMaxPrice = #numberFormat(finalPrice, "___")# /> 
-	</cfif>    
+	<cfif finalPrice LT finalMinPrice>
+		<cfset finalMinPrice = #Round(finalPrice)# /> 
+	</cfif>  
 <cfelse>
-	<cfset finalMinPrice = #numberFormat(finalPrice, "___")# />
-	<cfset finalMaxPrice = #numberFormat(finalPrice, "___")# />
+	<cfset finalMinPrice = #Round(finalPrice)# />
 </cfif>
 
-<cfif finalMinPrice GT finalPrice>
-<cfset finalMinPrice = #numberFormat(finalPrice, "___")# />
+<cfif IsDefined("finalMaxPrice")>
+	<cfif finalPrice GT finalMaxPrice>
+		<cfset finalMaxPrice = #Round(finalPrice)# /> 
+	</cfif>  
+<cfelse>
+	<cfset finalMaxPrice = #Round(finalPrice)# />
 </cfif>
+
 
 
     <cfset ArrayAppend(eachProductArray,eachProductStruct) />
-    <cfif sort EQ "pricelowhigh">
-      <cfset eachProductArray = ArrayOfStructSort(eachProductArray, "Numeric", "asc", "final_price")>
-    </cfif>
-    <cfif sort EQ "pricehighlow">
-      <cfset eachProductArray = ArrayOfStructSort(eachProductArray, "Numeric", "desc", "final_price")>
-    </cfif>    
-  </cfloop>
+    
+<cfif sort EQ "pricelowhigh">
+      <cfset eachProductArray = ArrayOfStructSort(eachProductArray, "Numeric", "asc", "final_price_rounded")>
+</cfif>
+
+<cfif sort EQ "pricehighlow">
+      <cfset eachProductArray = ArrayOfStructSort(eachProductArray, "Numeric", "desc", "final_price_rounded")>
+</cfif>
+       
+</cfloop><!---end GetSecondProductData--->
+
+<!---<cfloop from="#productstart#" to="#productend#" index="i">
+<cfset ArrayAppend(eachProductArraySome, eachProductArray[i])>
+</cfloop>--->
+
+<!---<cfset eachProductArray = arraySlice(eachProductArray, #productstart#, #productend#) />--->
+
+
 
 <cfset initialProductIDList = ArrayToList(initialProductIDArray, ",")>
 
@@ -392,7 +406,6 @@
   
   <!---output JSON data if found results--->
   <cfoutput> {
-  "temp": "#secondProductIDList#",
     "found_products": true,
     "total_products": #GetSecondProductData.Recordcount#,
     "first_page": #firstPage#,
@@ -408,7 +421,7 @@
     "product_start": #productstart#,
     "product_end": #productend#,
     "min_price": #finalMinPrice#,
-    "max_price": #finalMinPrice#,    
+    "max_price": #finalMaxPrice#,    
     "show_per_page": #productsperpage#,
     "products_per_page": #serializeJSON(perPageArray)#,
     "products_sort": #serializeJSON(sortArray)#,
