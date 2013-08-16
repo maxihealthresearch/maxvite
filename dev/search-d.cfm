@@ -28,7 +28,6 @@
   </div>
   <!--end content-->
   <script id="filterTpl" type="text/x-handlebars-template">
-{{#if found_products}}
 <ul id="refineResults">
   <li>Refine Results</li>
   <li class="refine-results-clearall hidden"><a href="clear all">Clear All</a></li>
@@ -110,10 +109,8 @@
 	</div>
 </div>
 
-{{/if}}
 </script>
   <script id="listTpl" type="text/x-handlebars-template">
-{{#if found_products}}
 <cfinclude template="listpage-toolbar.cfm">			
 
 <ol class="items items-list hidden">
@@ -233,7 +230,6 @@
 <!---product-grid end--->
 
 <cfinclude template="listpage-toolbar.cfm">			
-{{/if}}
 </script>
   <script>
 <cfoutput>
