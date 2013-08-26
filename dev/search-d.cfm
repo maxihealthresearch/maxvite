@@ -30,8 +30,16 @@
   <script id="filterTpl" type="text/x-handlebars-template">
 <ul id="refineResults">
   <li>Refine Results</li>
-  <li class="refine-results-clearall hidden"><a href="clear all">Clear All</a></li>
+  <li class="refine-results-clearall {{#unless filter_used}}hidden{{/unless}}"><a href="clear all">Clear All</a></li>
 </ul>
+
+<!---<div class="filter-module filter-module-selected-filters" data-module="selectedfilters">
+<ul class="filter-module-title">
+  <li>Filters</li>
+  <li class="filter-module-toggler">Show/Hide</li>
+  <li class="filter-module-clear"><a href="clear">CLEAR ALL</a></li>
+</ul>
+</div>--->
 
 <div class="filter-module filter-module-brand" data-module="brand">
 <ul class="filter-module-title">

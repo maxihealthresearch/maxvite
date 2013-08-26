@@ -27,6 +27,7 @@
 <cfset eachSpecialArray = ArrayNew(1) />
 <cfset initialProductIDArray = ArrayNew(1) />
 <cfset secondProductIDArray = ArrayNew(1) />
+<cfset priceRangeArray = ArrayNew(1) />
 
 <cfparam name="q" default="">
 <cfparam name="numberonpage" type="integer" default="30">
@@ -38,7 +39,9 @@
 <cfparam name="specialsfilter" type="string" default="0">
 <cfparam name="productidfilter" type="string" default="0">
 <cfparam name="sort" type="string" default="nameaz">
+<cfparam name="pricerange" type="string" default="5,15"><!---replace temporary value with 0--->
 
+<cfset priceRangeArray = ListToArray(pricerange)>
 
 <cfquery name="GetInitialProductData" datasource="#Application.ds#">
   SELECT p.ProductID, p.BrandID, p.Title, p.instockflag, p.strapline, p.ServingSize, p.listprice, p.ourprice, p.featuredproductflag, p.featuredproductflag2, p.imagebig, p.description, p.Tablets
@@ -152,9 +155,9 @@
     <cfset eachProductStruct["instock"] = #instockflag# />
     <cfset eachProductStruct["form"] = "#Tablets#" />
     
-<!---    <cfset newstrapline = PreserveSingleQuotes(strapline)>
-    
-    <cfset eachProductStruct["strap_line"] = "#newstrapline#" />--->
+    <!---<cfset newstrapline = PreserveSingleQuotes(strapline)>--->
+        <cfset eachProductStruct["strap_line"] = "#strapline#" />
+
     <cfset eachProductStruct["serving_size"] = "#ServingSize#" />
     <cfset eachProductStruct["image_url"] = "#imageURL#" />
     <cfset eachProductStruct["product_url"] = "/#ProductID#/#ReReplace(title,"[^0-9a-zA-Z]+","-","ALL")#/product.html" />
@@ -211,14 +214,7 @@
 
 
     <cfset ArrayAppend(eachProductArray,eachProductStruct) />
-    
-<cfif sort EQ "pricelowhigh">
-      <cfset eachProductArray = ArrayOfStructSort(eachProductArray, "Numeric", "asc", "final_price_rounded")>
-</cfif>
 
-<cfif sort EQ "pricehighlow">
-      <cfset eachProductArray = ArrayOfStructSort(eachProductArray, "Numeric", "desc", "final_price_rounded")>
-</cfif>
        
 </cfloop><!---end GetSecondProductData--->
 
@@ -228,7 +224,22 @@
 
 <!---<cfset eachProductArray = arraySlice(eachProductArray, #productstart#, #productend#) />--->
 
+<cfif sort EQ "pricelowhigh">
+      <cfset eachProductArray = ArrayOfStructSort(eachProductArray, "Numeric", "asc", "final_price_rounded")>
+</cfif>
 
+<cfif sort EQ "pricehighlow">
+      <cfset eachProductArray = ArrayOfStructSort(eachProductArray, "Numeric", "desc", "final_price_rounded")>
+</cfif>
+
+<cfif pricerange NEQ "">
+	<cfset eachProductArray = ArrayOfStructSort(eachProductArray, "Numeric", "desc", "final_price_rounded")>
+  <!---To Do: get position whose final_price_rounded value = 5--->
+<!---	<cfset posone = 5 >     
+	<cfset eachProductArray = arraySlice(eachProductArray, 5, 50) />    --->
+</cfif>
+<!---	<cfset eachProductArray = ArrayOfStructSort(eachProductArray, "Numeric", "desc", "final_price_rounded")>
+	<cfset eachProductArray = arraySlice(eachProductArray, 5, 50) /> ---> 
 
 <cfset initialProductIDList = ArrayToList(initialProductIDArray, ",")>
 
@@ -403,14 +414,22 @@
   <cfset brandsSelected = ( brandfilter NEQ 0 )? true : false />
   <cfset specialsSelected = ( specialsfilter NEQ 0 )? true : false />
   <cfset concernsSelected = ( concernfilter NEQ 0 )? true : false />
+<cfif brandfilter NEQ 0 OR specialsfilter NEQ 0 OR concernfilter NEQ 0>
+<cfset filterUsed = true>
+<cfelse>
+<cfset filterUsed = false>
+</cfif>
   
   <!---output JSON data if found results--->
+<cfcontent type="application/json">
+
   <cfoutput> {
     "found_products": true,
     "total_products": #GetSecondProductData.Recordcount#,
     "first_page": #firstPage#,
     "prev_page": #prevPage#,
     "is_last_page": #lastPage#,
+    "filter_used": #filterUsed#,
     "show_specials": #showSpecials#,
     "brands_selected": #brandsSelected#,
     "specials_selected": #specialsSelected#,
@@ -428,5 +447,6 @@
     "brands": #serializeJSON(eachBrandArray)#,
     "concerns": #serializeJSON(eachConcernArray)#,    
     "specials": #serializeJSON(eachSpecialArray)#,                            
-    "products" : #serializeJSON(eachProductArray)# } </cfoutput>
+    "products" : #serializeJSON(eachProductArray)# } 
+	</cfoutput>
 </cfif>
