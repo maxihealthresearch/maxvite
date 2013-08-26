@@ -50,7 +50,7 @@
 <!--end content-->
 
 
-<script id="filterTpl" type="text/x-handlebars-template">
+  <script id="filterTpl" type="text/x-handlebars-template">
 {{#if found_products}}
 <ul id="refineResults">
   <li>Refine Results</li>
@@ -68,13 +68,33 @@
 {{#each brands}}
 <li data-brandid="{{brand_id}}" {{#if selected}}class="checkbox-list-selected"{{/if}}>
 <span class="filter-module-checkbox">&nbsp;</span>
-<!---<input type="checkbox" class="checkbox-list-option" value="{{brand_id}}" {{#if selected}}checked="true"{{/if}}>--->
 <label alt="{{brand_name}}" for="{{brand_id}}">{{brand_name}} <span class="filter-module-checkbox-count">({{count}})</span></label>
 </li>
 {{/each}}
 </ul>
 
 </div>
+
+
+<div class="filter-module filter-module-concern" data-module="concern">
+<ul class="filter-module-title">
+  <li>Health Concern</li>
+  <li class="filter-module-toggler">Show/Hide</li>
+  <li class="filter-module-clear {{#unless concerns_selected}}hidden{{/unless}}"><a href="clear">Clear</a></li>
+</ul>
+
+<ul class="checkbox-list filter-module-main">
+{{#each concerns}}
+<li data-concernid="{{concern_id}}" {{#if selected}}class="checkbox-list-selected"{{/if}}>
+<span class="filter-module-checkbox">&nbsp;</span>
+<label alt="{{concern_name}}" for="{{concern_id}}">{{concern_name}} <span class="filter-module-checkbox-count">({{count}})</span></label>
+</li>
+{{/each}}
+</ul>
+
+</div>
+
+
 
 {{#if show_specials}}
 <div class="filter-module filter-module-specials" data-module="specials">
@@ -98,10 +118,10 @@
 
 {{/if}}
 </script>
+
 <script id="listTpl" type="text/x-handlebars-template">
 {{#if found_products}}
 <cf_listpage-toolbar>			
-
 <ol class="items items-list hidden">
 {{#each products}}  
       <li>
@@ -142,7 +162,7 @@
                                 <input type="hidden" value="{{product_id}}" name="ProductID">
 								<ul class="items-list-qty-box">
 								<li>Quantity</li>
-								<li><cfinclude template="listpage-product-qty.cfm"></li>
+								<li>cf_listpage-product-qty></li>
 								<li><button class="btn bigButton" name="addtocart" type="submit">Add To Cart</button><span class="addingItemMsg"><img src="/img/spinner.gif"> Adding To Cart</span></li>
 								</ul>                
               </form>
@@ -197,7 +217,7 @@
                                 <input type="hidden" value="{{product_id}}" name="ProductID">
 								<ul class="items-list-qty-box">
 								<li>Qty.</li>
-								<li><cfinclude template="listpage-product-qty.cfm"></li>
+								<li><cf_listpage-product-qty></li>
 								<li><button name="addtocart" class="btn">Add To Cart</button><span class="addingItemMsg"><img src="/img/spinner.gif"> Adding To Cart</span></li>
 								</ul>                
               </form>
@@ -216,6 +236,7 @@
 {{/each}}
 
 </ol>
+
 <!---product-grid end--->
 
 <cf_listpage-toolbar>			
