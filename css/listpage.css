@@ -1,0 +1,449 @@
+/* To Do */
+
+/* Add padding-top to checkboxes in .checkbox-list */
+ #listProductsWrap .listpage-toolbar {
+    border: silver solid 1px;
+    background-color: #f1f1f1;
+    width: 708px;
+    height: 19px;
+    padding: 4px;
+    overflow: hidden;
+    margin: 0;
+    position: relative;
+}
+#listProductsWrap .items-grid, #listProductsWrap .items-list {
+    width: 718px;
+    overflow: hidden;
+    padding: 0;
+}
+#listProductsWrap .items-grid .items-grid-node {
+    background-color: #fff;
+    text-align: center;
+    position: relative;
+    width: 236px;
+    display: inline-block;
+    vertical-align: top;
+    padding: 0;
+    margin: 10px 0;
+    list-style-type: none;
+}
+#listProductsWrap .items-grid .items-grid-separator {
+    border-bottom: 1px solid #d5d5d5;
+    height: 1px;
+    width: 100%;
+}
+#listProductsWrap .items-list > li {
+    width: 718px;
+    display:block;
+    border-bottom: 1px solid #d5d5d5;
+    margin: 0;
+    padding: 10px 0;
+    background-color: #fff;
+    text-align: center;
+    position: relative;
+    vertical-align: top;
+    list-style-type: none;
+}
+#listProductsWrap .items-list dl, #listProductsWrap .items-list dl dd {
+    float: left;
+}
+#listProductsWrap .items-list dl dd:first-child {
+    width: 116px;
+    vertical-align: top;
+}
+#listProductsWrap .items-list dl dd:first-child a img {
+    max-width: 100px;
+    max-height: 100px;
+}
+#listProductsWrap .items-list-info {
+    width: 292px;
+    padding-right: 40px;
+    text-align: left;
+}
+#listProductsWrap .items-list-info-title {
+    font-size: 14px;
+    font-weight: bold;
+}
+#listProductsWrap .items-list-pricing-usave {
+    color: #bf000b;
+}
+#listProductsWrap .items-list-sizeform {
+    width: 268px;
+    overflow: hidden;
+    float: left;
+    font-size: 12px;
+    text-align: left;
+}
+#listProductsWrap .items-list-sizeform dt {
+    float: left;
+    width: 78px;
+}
+#listProductsWrap .items-list-sizeform dd {
+    float: left;
+    width: 178px;
+}
+#listProductsWrap .items-list-pricing {
+    text-align: left;
+}
+#listProductsWrap .items-list-ourprice {
+    font-size: 18px;
+    line-height: 25px;
+    font-weight: 700;
+    color: #bf000b;
+}
+#listProductsWrap .items-list-qty-box {
+    margin: 0.3em 0 0 0;
+    padding:0;
+    overflow: hidden;
+}
+#listProductsWrap .items-list-qty-box li {
+    float: left;
+    margin: 0;
+    padding-right: 0.5em;
+}
+#listProductsWrap .items-list .items-list-qty-box li:first-child {
+    font-weight:bold;
+}
+#listProductsWrap .items-grid .items-grid-node dl {
+    text-align: left;
+    width: 226px;
+}
+#listProductsWrap .items-grid .items-grid-node dl .items-grid-thumb {
+    width: 226px;
+    height: 100px;
+    margin-bottom: 5px;
+}
+#listProductsWrap .items-grid .items-grid-node dl .items-grid-thumb a {
+    display: table-cell;
+    width: 224px;
+    height: 100px;
+    text-align: center;
+    vertical-align: bottom;
+}
+#listProductsWrap .items-grid .items-grid-node dl .items-grid-thumb a img {
+    vertical-align: bottom;
+    max-width: 100px;
+    max-height: 100px;
+    border: 0;
+}
+#listProductsWrap .items-grid .items-grid-node dl .items-grid-title {
+    font-weight: bold;
+    color: #004922;
+}
+#listProductsWrap .items-grid .items-grid-node dl .items-grid-form {
+    font-style: italic
+}
+#listProductsWrap .items-grid .items-grid-node dl dd {
+    font-size: 12px;
+}
+#listProductsWrap .items-grid .items-grid-node dl dd .items-grid-price, #listProductsWrap .items-grid .items-grid-node dl .items-grid-bigprice {
+    color: #bf000b;
+    font-weight: bold;
+}
+#listProductsWrap .items-grid .items-grid-node dl .items-grid-listprice, #listProductsWrap .items-list li dl .items-list-listprice {
+    color: #555;
+}
+#listProductsWrap .items-grid-listprice {
+    margin:0.3em 0 0 0;
+    overflow:hidden;
+}
+#listProductsWrap .items-grid-listprice li {
+    float:left;
+}
+#listProductsWrap .items-grid-bogo {
+    margin:0.3em 0 0 0;
+    color: #bf000b;
+    font-weight: bold;
+}
+#listProductsWrap .items-grid .items-grid-node dl .addToCartBox {
+    float: left;
+    margin-top: 3px;
+}
+#listProductsWrap .items-grid .items-grid-node dl .addToCartBox p {
+    height: 22px;
+    line-height: 22px;
+}
+#listProductsWrap .items-grid .items-grid-node dl .addToCartBox p input[type='image'] {
+    vertical-align: middle
+}
+#listProductsWrap .items-grid .items-grid-node dl .addToCartBox p input[type='text'] {
+    margin: 0 3px
+}
+#listProductsWrap .items .small {
+    margin:0;
+}
+#filterSection {
+    width: 226px;
+    float: left;
+    margin-top: 5px;
+}
+#refineResults {
+    width:224px;
+    overflow:hidden;
+    display:block;
+}
+#refineResults li.refine-results-clearall {
+    float:right;
+    margin-top: 10px;
+    font-size: 11px;
+    text-decoration: underline;
+}
+#refineResults li:first-child {
+    font-size: 21px;
+    font-family: pt-sans, Arial, sans-serif;
+    font-weight: 400;
+    line-height: 33px;
+    float:left;
+}
+#filterSection .filter-module {
+    width:224px;
+    margin-top: 5px;
+}
+#filterSection .filter-module .filter-module-title {
+    width: 216px;
+    border: 1px solid #cbcbcb;
+    background:#f1f1f1;
+    height:19px;
+    padding:4px;
+}
+#filterSection .filter-module .filter-module-title li {
+    float:right;
+}
+#filterSection .filter-module .filter-module-title li:first-child {
+    font-weight:bold;
+    float:left;
+}
+#filterSection .filter-module .filter-module-title .filter-module-toggler {
+    margin:4px 0 0 10px;
+    text-indent:-10000px;
+    height: 9px;
+    left:0;
+    display:block;
+    background: url(/img/listpage-sprite.png) no-repeat 0 -44px;
+    width:9px;
+    cursor:pointer;
+}
+#filterSection .filter-module .filter-module-title .filter-module-toggler.filter-module-toggler-plus {
+    background: url(/img/listpage-sprite.png) no-repeat -9px -44px;
+}
+#filterSection .filter-module .filter-module-title .filter-module-clear {
+    font-size: 11px;
+    text-decoration: underline;
+}
+#filterSection .filter-module .checkbox-list {
+    border: 1px solid #cbcbcb;
+    border-top:0;
+    padding:4px;
+    max-height:180px;
+    overflow:auto;
+    width:216px;
+}
+#filterPriceBox {
+    border: 1px solid #cbcbcb;
+    border-top:0;
+    padding:14px 4px;
+    height:auto;
+    overflow:auto;
+    width:216px;
+}
+#filterPriceBox .filter-price-fields {
+    width:214px;
+    height: 23px;
+}
+#filterPriceBox .filter-price-fields li {
+    height:auto;
+    float:right;
+}
+#filterPriceBox .filter-price-fields li label {
+    margin-right: 3px;
+}
+#filterPriceBox .filter-price-fields li:first-child {
+    float:left;
+}
+#filterPriceBox .filter-price-fields li input[type='text'] {
+    width:30px;
+}
+#filterPriceSlider {
+    width: 214px;
+    margin: 0;
+    height: 18px;
+    position: relative;
+}
+#filterPriceBarBack {
+    background: #d7d7d7;
+    width:212px;
+    height:4px;
+    border:#ccc solid 1px;
+    border-radius: 4px;
+    position: absolute;
+    top:5px;
+    left: 0;
+}
+#filterPriceBarTop {
+    background:#a9a9a9;
+    width:140px;
+    height:4px;
+    border:#ccc solid 1px;
+    border-radius: 4px;
+    position: absolute;
+    top:5px;
+    left: 0;
+}
+#filterPriceBox .filter-price-handle {
+    margin:0;
+    text-indent:-10000px;
+    height: 16px;
+    width:16px;
+    left:0;
+    display:block;
+    background: url(/img/listpage-sprite.png) no-repeat 0 -53px;
+    cursor:pointer;
+    position: absolute;
+    top: 0px;
+    z-index: auto;
+}
+#filterPriceBox .filter-price-handle:hover {
+    background-position:0 -69px;
+}
+#filterPriceBox .filter-price-handle.filter-price-handle-max {
+    left:140px;
+}
+#filterSection .filter-module .checkbox-list li {
+    line-height: 18px;
+    margin: 2px 0 3px;
+    padding: 0;
+    cursor:pointer;
+}
+#filterSection .filter-module .checkbox-list li .filter-module-checkbox {
+    background: url(/img/listpage-sprite.png) no-repeat 0 -101px;
+    width:16px;
+    height:16px;
+    display:inline-block;
+    line-height: 13px;
+}
+#filterSection .filter-module .checkbox-list li:hover .filter-module-checkbox {
+    background-position:0 -117px;
+}
+#filterSection .filter-module .checkbox-list .checkbox-list-selected label {
+    color:#BF000B;
+}
+#filterSection .filter-module .checkbox-list .checkbox-list-selected {
+    background:#eee;
+}
+#filterSection .filter-module .checkbox-list .checkbox-list-selected .filter-module-checkbox, 
+#filterSection .filter-module .checkbox-list .checkbox-list-selected:hover .filter-module-checkbox {
+    background-position:0 -133px;
+}
+#filterSection .filter-module .checkbox-list li:hover {
+    background: #ddd;
+}
+#filterSection .filter-module .checkbox-list .filter-module-checkbox-count {
+    color:#555;
+    font-size:10px;
+}
+#filterSection .filter-module .checkbox-list .checkbox-list-option {
+    margin-top: 3px;
+    vertical-align: top;
+}
+.paginator {
+    margin:4px 0 0 35px;
+    padding:0;
+    list-style-type:none;
+    font-size:12px;
+    font-weight:bold;
+    line-height:11px;
+    position:relative;
+    float:left;
+}
+.paginator li {
+    float:left;
+    margin-right:15px;
+}
+.paginator li a {
+    text-indent:-10000px;
+    height: 11px;
+    left:0;
+    display:block;
+    background: transparent url(/img/listpage-sprite.png) no-repeat 0 0;
+    cursor:default;
+}
+.paginator .begin-arrow a {
+    background-position: -12px -11px;
+    width:12px;
+}
+.paginator .prev-arrow a {
+    background-position: -12px -11px;
+    width:6px;
+}
+.paginator .begin-arrow.paginator-active a, .paginator .prev-arrow.paginator-active a {
+    background-position: 0 -11px;
+    cursor:pointer;
+}
+.paginator .last-arrow a {
+    background-position: -12px 0;
+    width:12px;
+}
+.paginator .next-arrow a {
+    background-position: -12px 0;
+    width:6px;
+}
+.paginator .last-arrow.paginator-active a, .paginator .next-arrow.paginator-active a {
+    background-position: 0 0;
+    cursor:pointer;
+}
+.listpage-toolbar select {
+    font-size:11px;
+}
+.listpage-toolbar .listpage-toolbar-display {
+    float: left;
+    position: relative;
+    font-size: 12px;
+}
+.listpage-toolbar .listpage-toolbar-numberonpage {
+    float: right;
+    margin-left: 13px;
+}
+.listpage-toolbar .listpage-toolbar-numberonpage li {
+    float: left;
+    margin-left: 3px;
+}
+.listpage-toolbar .listpage-toolbar-view, .listpage-toolbar .listpage-toolbar-sortby {
+    overflow:hidden;
+    float:right;
+    font-size:12px;
+    margin-left:30px;
+}
+.listpage-toolbar .listpage-toolbar-view li, .listpage-toolbar .listpage-toolbar-sortby li {
+    float:left;
+    margin-right:5px;
+}
+.listpage-toolbar .listpage-toolbar-view .views {
+    text-indent:-10000px;
+    height: 11px;
+    left:0;
+    display:block;
+    background: url(/img/listpage-sprite.png) no-repeat 0 -22px;
+    width:11px;
+    margin-top: 4px;
+}
+.listpage-toolbar .listpage-toolbar-view .grid-view, .listpage-toolbar .listpage-toolbar-view .list-view {
+    cursor:pointer;
+}
+.listpage-toolbar .listpage-toolbar-view .listpage-toolbar-view-selected {
+    cursor:default;
+}
+.listpage-toolbar .listpage-toolbar-view .grid-view {
+    background-position: -11px -33px;
+}
+.listpage-toolbar .listpage-toolbar-view .grid-view:hover, .listpage-toolbar .listpage-toolbar-view .grid-view.listpage-toolbar-view-selected {
+    background-position: -11px -22px;
+}
+.listpage-toolbar .listpage-toolbar-view .list-view {
+    background-position: 0 -33px;
+}
+.listpage-toolbar .listpage-toolbar-view .list-view:hover, .listpage-toolbar .listpage-toolbar-view .list-view.listpage-toolbar-view-selected {
+    background-position: 0 -22px;
+}
+.listpage-toolbar-numberonpage .per-page-selected {
+    font-weight:bold;
+}
