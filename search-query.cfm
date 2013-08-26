@@ -18,20 +18,28 @@
   <cfreturn returnVal>
 </cffunction>
 <!------>
+
+
 <cfset eachProductArray = ArrayNew(1) />
 <cfset eachBrandArray = ArrayNew(1) />
+<cfset eachConcernArray = ArrayNew(1) />
 <cfset eachSpecialArray = ArrayNew(1) />
-<cfset productIDArray = ArrayNew(1) />
+<cfset initialProductIDArray = ArrayNew(1) />
+<cfset secondProductIDArray = ArrayNew(1) />
+
 <cfparam name="q" default="">
 <cfparam name="numberonpage" type="integer" default="30">
 <cfparam name="startpage" type="numeric" default="0">
 <cfparam name="productstart" type="integer" default="1">
 <cfparam name="productend" type="integer" default="30">
 <cfparam name="brandfilter" type="string" default="0">
+<cfparam name="concernfilter" type="string" default="0">
 <cfparam name="specialsfilter" type="string" default="0">
 <cfparam name="productidfilter" type="string" default="0">
 <cfparam name="sort" type="string" default="nameaz">
-<cfquery name="GetProductData" datasource="#Application.ds#">
+
+
+<cfquery name="GetInitialProductData" datasource="#Application.ds#">
   SELECT p.ProductID, p.BrandID, p.Title, p.instockflag, p.strapline, p.ServingSize, p.listprice, p.ourprice, p.featuredproductflag, p.featuredproductflag2, p.imagebig, p.description, p.Tablets
   FROM Products p
   Where p.Display = 1                      
@@ -47,23 +55,31 @@
   ORDER BY p.Title ASC
 </cfquery>
 
-<cfif GetProductData.Recordcount EQ 0>
+<cfif GetInitialProductData.Recordcount EQ 0>
   <!---output JSON data if no results found--->
   {
   "found_products": false
   }
-  <cfelse>
-  <cfquery name="GetData" datasource="#Application.ds#">
-  SELECT p.ProductID, p.BrandID, p.Title, p.instockflag, p.strapline, p.ServingSize, p.listprice, p.ourprice, p.featuredproductflag, p.featuredproductflag2, p.imagebig, p.description, p.Tablets
-  FROM Products p
-  Where p.Display = 1                      
-  <cfif brandfilter NEQ 0>
+<cfelse>
+
+
+<cfquery name="GetSecondProductData" datasource="#Application.ds#">
+  SELECT DISTINCT p.ProductID, p.BrandID, p.Title, p.instockflag, p.strapline, p.ServingSize, p.listprice, p.ourprice, p.featuredproductflag, p.featuredproductflag2, p.imagebig, p.description, p.Tablets
+  FROM Products p, Product_Formula_Map pfm
+  WHERE p.ProductID = pfm.ProductID
+  AND p.Display = 1
+                        
+<cfif brandfilter NEQ 0>
     AND p.BrandID IN (#URLDecode(brandfilter)#)
-    <!---AND BrandID IN (1,6)--->
-  </cfif>
-  <cfif productidfilter NEQ 0>
+</cfif>
+
+<cfif concernfilter NEQ 0>
+    AND pfm.FORMULATYPEID IN (#URLDecode(concernfilter)#)
+</cfif>
+    
+<cfif productidfilter NEQ 0>
     AND p.ProductID IN (#URLDecode(productidfilter)#)
-    <cfelse>
+<cfelse>
   AND
   (p.Description like '%#q#%'
    OR
@@ -73,20 +89,30 @@
    OR
   p.UPC like '%#q#%'
    )    
-  </cfif>  
+</cfif>  
 
-  <cfif sort EQ "nameza">
+<cfif sort EQ "nameza">
     ORDER BY p.Title DESC
-    <cfelse>
+<cfelse>
     ORDER BY p.Title ASC
-  </cfif>
+</cfif>
+
 </cfquery>
-  <cfset productstart = Ceiling((startpage*numberonpage)+1)>
-  <cfset productend = Ceiling(productstart + (numberonpage-1))>
-  <cfloop query="GetProductData">
-    <cfset ArrayAppend(productIDArray, #ProductID#)>
-  </cfloop>
-  <cfloop query="GetData" startrow="#productstart#" endrow="#productend#">
+
+<cfset productstart = Ceiling((startpage*numberonpage)+1)>
+<cfset productend = Ceiling(productstart + (numberonpage-1))>
+
+<cfloop query="GetInitialProductData">
+  <cfset ArrayAppend(initialProductIDArray, #ProductID#)>
+</cfloop>
+
+<cfloop query="GetSecondProductData">
+  <cfset ArrayAppend(secondProductIDArray, #ProductID#)>
+</cfloop>
+
+
+<cfloop query="GetSecondProductData" startrow="#productstart#" endrow="#productend#">
+  
     <!---check if product is buy 1 get 1 free--->
     <cfquery name="GetDataSubc" datasource="#Application.ds#" maxrows=1>
   Select DISTINCT Category.categoryID, Category, SubCategory.subcategoryid, subcategory
@@ -95,7 +121,9 @@
   AND SubCategory.CategoryID = 54
   AND Product_SUBCategory_Map.ProductID = #ProductID#
 </cfquery>
-    <cfquery name="GetMinOrderQty" datasource="#Application.ds#">
+
+
+<cfquery name="GetMinOrderQty" datasource="#Application.ds#">
   SELECT b.MIN, p.BrandID, b.BrandID    
   FROM Products p, Brands b
   WHERE p.BrandID = b.BrandID
@@ -122,9 +150,9 @@
     <cfset eachProductStruct["instock"] = #instockflag# />
     <cfset eachProductStruct["form"] = "#Tablets#" />
     
-<!---    <cfset jsStrapLine = JSStringFormat(#StrapLine#)>
+<!---    <cfset newstrapline = PreserveSingleQuotes(strapline)>
     
-    <cfset eachProductStruct["strap_line"] = "#jsStrapLine#" />--->
+    <cfset eachProductStruct["strap_line"] = "#newstrapline#" />--->
     <cfset eachProductStruct["serving_size"] = "#ServingSize#" />
     <cfset eachProductStruct["image_url"] = "#imageURL#" />
     <cfset eachProductStruct["product_url"] = "/#ProductID#/#ReReplace(title,"[^0-9a-zA-Z]+","-","ALL")#/product.html" />
@@ -162,20 +190,28 @@
       <cfset eachProductArray = ArrayOfStructSort(eachProductArray, "Numeric", "asc", "final_price")>
     </cfif>
   </cfloop>
-  <cfset productsIDList = ArrayToList(productIDArray, ",")>
+
+<cfset initialProductIDList = ArrayToList(initialProductIDArray, ",")>
+
+<cfset secondProductIDList = ArrayToList(secondProductIDArray, ",")>
+
+
 <cfquery name="GetBrandData" datasource="#Application.ds#">
   SELECT b.Brand, p.Description, p.BrandID, p.ProductID, COUNT(*) as "product_count"
   FROM Products p, Brands b
   WHERE p.BrandID = b.BrandID
-  AND p.Display = 1                        
-  <cfif productidfilter NEQ 0>
-  AND p.ProductID IN (#productidfilter#)
-  <cfelse>
-  AND p.ProductID IN (#productsIDList#)  
-  </cfif>        
+  AND p.Display = 1
+
+<cfif concernfilter NEQ 0 OR specialsfilter NEQ 0>
+  AND p.ProductID IN (#secondProductIDList#)
+<cfelse>
+  AND p.ProductID IN (#initialProductIDList#)
+</cfif>
+            
   Group by p.BrandID
   Order by b.Brand ASC
 </cfquery>
+ 
   <cfloop query="GetBrandData">
     <cfset eachBrandStruct = StructNew() />
     <cfset eachBrandStruct["brand_id"] = #BrandID# />
@@ -192,21 +228,62 @@
     </cfif>
     <cfset ArrayAppend(eachBrandArray,eachBrandStruct) />
   </cfloop>
+
+<cfquery name="GetConcernsData" datasource="#Application.ds#">
+	Select f.FormulaType, f.FormulaTypeID, COUNT(m.ProductID) as "product_count"
+	from Product_Formula_Map m, FormulaTypes f
+	Where m.FormulaTypeID = f.FormulaTypeID
+
+  <cfif secondProductIDList NEQ 0>
+  AND m.ProductID IN (#secondProductIDList#)  
+  <cfelse>
+  AND m.ProductID IN (#initialProductIDList#)  
+  </cfif>     
+    
+    Group by f.FormulaType
+</cfquery>
+
+  <cfloop query="GetConcernsData">
+    <cfset eachConcernStruct = StructNew() />
+    <cfset eachConcernStruct["concern_id"] = #FormulaTypeID# />
+    <cfset eachConcernStruct["concern_name"] = "#FormulaType#" />
+    <cfset eachConcernStruct["count"] = #product_count# />
+       
+    <cfset eachConcernStruct["selected"] = #product_count# />
+    <cfset  concernFilterArray = ListToArray(concernfilter)>
+    <cfset hasConcern = ArrayContains(concernFilterArray, FormulaTypeID)>
+    <cfif hasConcern EQ "YES">
+      <cfset eachConcernStruct["selected"] = true />
+      <cfelse>
+      <cfset eachConcernStruct["selected"] = false />
+    </cfif>    
+    
+    <cfset ArrayAppend(eachConcernArray,eachConcernStruct) />
+  </cfloop>
+
+
   <!---<cfset specialFilterList = ( specialsfilter NEQ 0 )? "#specialsfilter#" : "554,865,313" />--->
   <cfset specialFilterList = "554,865,313" />
   <!---query only Weekly Specials, Buy 1 get 1 Free and Super Deals--->
-  <cfquery name="GetSpecials" datasource="#Application.ds#">
+
+<cfquery name="GetSpecials" datasource="#Application.ds#">
   SELECT sm.SUBCATEGORYID, sc.SUBCATEGORY, group_concat(sm.ProductID) as "product_id_list", COUNT(*) as "specials_count"
   FROM SubCategory sc, Product_SUBCategory_Map sm, Products p
   WHERE sm.SUBCATEGORYID IN (#specialFilterList#)
   AND sm.SUBCATEGORYID = sc.SUBCATEGORYID
   AND sm.ProductID = p.ProductID      
-  AND sm.ProductID IN (#productsIDList#)
-  <cfif brandfilter NEQ 0>
-    AND p.BrandID IN (#URLDecode(brandfilter)#)
-  </cfif>       
+
+  <cfif productidfilter NEQ 0>
+  AND sm.ProductID IN (#productidfilter#)
+  <cfelseif brandfilter NEQ 0 or concernfilter NEQ 0>
+  AND sm.ProductID IN (#secondProductIDList#)    
+  <cfelse>
+  AND sm.ProductID IN (#initialProductIDList#)  
+  </cfif>  
+    
   Group by sm.SUBCATEGORYID
 </cfquery>
+
   <cfif GetSpecials.RecordCount GT 0>
     <cfset showSpecials = true>
     <cfelse>
@@ -228,8 +305,12 @@
     </cfif>
     <cfset ArrayAppend(eachSpecialArray,eachSpecialStruct) />
   </cfloop>
-  <cfset NumProducts = Ceiling(GetData.Recordcount)>
-  <cfset NumPages = Ceiling(GetData.Recordcount/numberonpage)>
+  
+  
+  
+  
+  <cfset NumProducts = Ceiling(GetSecondProductData.Recordcount)>
+  <cfset NumPages = Ceiling(GetSecondProductData.Recordcount/numberonpage)>
   <cfset currentPage = (startpage+1)>
   <cfset lastPageID = (NumPages-1)>
   <cfset lastPage = (currentPage EQ NumPages) ? true : false>
@@ -282,16 +363,20 @@
   <!---Output json--->
   <cfset brandsSelected = ( brandfilter NEQ 0 )? true : false />
   <cfset specialsSelected = ( specialsfilter NEQ 0 )? true : false />
+  <cfset concernsSelected = ( concernfilter NEQ 0 )? true : false />
+  
   <!---output JSON data if found results--->
   <cfoutput> {
+  "temp": "#secondProductIDList#",
     "found_products": true,
-    "total_products": #GetData.Recordcount#,
+    "total_products": #GetSecondProductData.Recordcount#,
     "first_page": #firstPage#,
     "prev_page": #prevPage#,
     "is_last_page": #lastPage#,
     "show_specials": #showSpecials#,
     "brands_selected": #brandsSelected#,
-    "specials_selected": #specialsSelected#,    
+    "specials_selected": #specialsSelected#,
+    "concerns_selected": #concernsSelected#,            
     "next_page": #currentPage#,
     "last_page_id": #lastPageID#,
     "current_page": #currentPage#,
@@ -301,6 +386,7 @@
     "products_per_page": #serializeJSON(perPageArray)#,
     "products_sort": #serializeJSON(sortArray)#,
     "brands": #serializeJSON(eachBrandArray)#,
+    "concerns": #serializeJSON(eachConcernArray)#,    
     "specials": #serializeJSON(eachSpecialArray)#,                            
     "products" : #serializeJSON(eachProductArray)# } </cfoutput>
 </cfif>
