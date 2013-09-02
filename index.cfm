@@ -21,6 +21,7 @@
 <meta name="msvalidate.01" content="5781438C69C354528E4218C2C8FFD0B5">
 <link rel="shortcut icon" type="image/ico" href="favicon.ico" />
 <cf_styles>
+<cf_headscripts>
 <link rel="stylesheet" href="/css/home.min.css?v=<cfoutput>#Rand('SHA1PRNG')#</cfoutput>" media="screen">
 </head>
 <body>

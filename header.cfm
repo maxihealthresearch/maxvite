@@ -23,10 +23,10 @@
             <form action="https://www.maxvite.com/userverifylo.cfm" method="post" name="LOGIN" id="signinForm" class="hdrForm">
               <ol>
                 <li>
-                  <input type="text" id="menuUsername" name="username" size="20" maxlength="100" title="Invalid Email">
+                  <input type="text" id="menuUsername" name="username" size="20" maxlength="100" title="Invalid Email" placeholder=" Email">
                 </li>
                 <li>
-                  <input type="password" id="menuPassword" name="password" size="20" title="Invalid Password">
+                  <input type="password" id="menuPassword" name="password" size="20" title="Invalid Password" placeholder=" Password">
                 </li>
               </ol>
      <a href="https://www.maxvite.com/forgot.cfm" class="forgot-password">Forgot password?</a>
@@ -43,10 +43,10 @@
           <form id="trackOrderForm" class="hdrForm">
             <ol>
               <li>
-                <input type="text" name="orderid">
+                <input type="text" name="orderid" placeholder=" Order ID">
               </li>
               <li>
-                <input type="text" name="orderemail">
+                <input type="text" name="orderemail" placeholder=" Email">
               </li>
             </ol>
             <button type="submit" class="btn bigButton">Track Order</button>
