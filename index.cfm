@@ -2,9 +2,6 @@
 	SELECT * from homeimages
 	ORDER BY SortID
 </CFQUERY>
-<cfquery name="GetHomeText" datasource="#Application.ds#">
-	SELECT HomeText FROM AboutUs 
-</cfquery>
 <cfinclude template="/doctype.cfm">
 <cfinclude template="/html.cfm">
 <head>
@@ -71,7 +68,7 @@
 
 
  
-   <cfoutput query="GetHomeText"><div class="clear">#HomeText#</div></cfoutput>
+   <cfoutput query="GetHomeData"><div class="clear">#HomeText#</div></cfoutput>
 
 
 
