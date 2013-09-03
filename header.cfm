@@ -3,6 +3,9 @@
 			FROM Users
 			WHERE UserID = #Session.UserID#
 </CFQUERY>
+<cfquery name="GetHomeData" datasource="#Application.ds#">
+	SELECT HomeText, holidayflag FROM AboutUs 
+</cfquery>
 <header id="topHeader">
   <div id="hdrNav">
     <ul id="hdrAccount">
